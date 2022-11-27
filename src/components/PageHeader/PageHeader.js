@@ -55,16 +55,47 @@ export default function PageHeader() {
   const onDismiss = () => setVisible(false);
   const onTrigger = () => setVisible(true);
 
+  const addNftToWal = async (contract, nftsym) => {
+    //const tokenAddress = "0xd00981105e61274c8a5cd5a88fe7e037d935b513";
+    // const tokenSymbol = "TUT";
+    // const tokenDecimals = 18;
+    // const tokenImage = "http://placekitten.com/200/300";
+    try {
+      const wasAdded = await ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20",
+          options: {
+            address: contract,
+            symbol: nftsym,
+            decimals: 0,
+          //image: tokenImage, // A string url of the token logo
+          },
+        },
+      });
+      if (wasAdded) {
+        console.log("Thanks for your interest!");
+      } else {
+        console.log("Your loss!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const claimNFTs = async (a) => {
     let cost = 0;
     let contractAddress = "";
+    let nftSymbol = "";
     // eslint-disable-next-line
     if (a == true) {
       cost = 50000000000000000000;
       contractAddress = "0x527F243B04fcaDaA6f6244F65d451bDeA8cBFa92";
+      nftSymbol = "TOXBAEBEEPIX"
     } else {
       cost = CONFIG.WEI_COST;
       contractAddress = CONFIG.CONTRACT_ADDRESS;
+      nftSymbol = "TXBAEBEE"
     }
     let totalCostWei = String(cost * mintAmount);
     setClaimingNFT(true);
@@ -103,6 +134,7 @@ export default function PageHeader() {
           setClaimingNFT(false);
           setshowLoader(false);
           dispatch(fetchData(blockchain.account));
+          addNftToWal(contractAddress, nftSymbol);
         });
     } catch (err) {
       setFeedback(`${err}`);
