@@ -490,8 +490,16 @@ export default function PageHeader() {
                                 </Alert>
                               </>
                             ) : null}
-                          
                             <br />
+                            {showLoader ? 
+                              <div className="cirbox">
+                              <div className="cirloader">
+                                <svg className="circircular" viewBox="25 25 50 50">
+                                  <circle className="cirpath" cx="50" cy="50" r="20" fill="none" strokeWidth="4" strokeMiterlimit="10"/>
+                                </svg>
+                              </div>
+                            </div>
+                              : ""}
                             <Button
                               variant="contained"
                               color="primary"
@@ -536,6 +544,15 @@ export default function PageHeader() {
                               ""
                             )}
                             <br />
+                            {claimingNFT ? 
+                              <div className="cirbox">
+                              <div className="cirloader">
+                                <svg className="circircular" viewBox="25 25 50 50">
+                                  <circle className="cirpath" cx="50" cy="50" r="20" fill="none" strokeWidth="4" strokeMiterlimit="10"/>
+                                </svg>
+                              </div>
+                            </div>
+                              : ""}
                             {/* eslint-disable-next-line */}
                             <div
                               style={{
