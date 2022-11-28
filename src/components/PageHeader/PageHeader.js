@@ -83,7 +83,7 @@ export default function PageHeader() {
     let cost = 0;
     let contractAddress = "";
     let nftSymbol = "";
-    let nftimg = ""
+    let nftimg = "";
     // eslint-disable-next-line
     if (a == true) {
       cost = 50000000000000000000;
@@ -125,9 +125,15 @@ export default function PageHeader() {
           setClaimingNFT(false);
           setshowLoader(false);
         })
-        .then((receipt) => {
+        .then( async(receipt) => {
+
+    const address = contractAddress;
+    const erc721 = new ethers.Contract(address, abi, provider);
+    let totsup = await erc721.totalSupply();
+    totsup = web3.utils.hexToNumber(totsup)
+       
           console.log(receipt);
-          txreceipt = receipt;
+          txreceipt = String(totsup + 1);
           setFeedback(
             `WOW, the ${CONFIG.NFT_NAME} is yours! go visit Opensea.io to view it ==> `
           );
@@ -162,24 +168,9 @@ export default function PageHeader() {
     if (blockchain.account !== "" && blockchain.smartContract !== null) {
       dispatch(fetchData(blockchain.account));
       setFeedback("Wallet connected, click 'MINT' to mint an NFT.");
-
-      blockchain.smartContract.methods
-        .totalSupply()
-        .send({ from: blockchain.account })
-        .on("transactionHash", function (hash) {
-          console.log(hash);
-        })
-        .on("confirmation", function (confirmationNumber, receipt) {
-          console.log(confirmationNumber);
-          console.log(receipt);
-        })
-        .on("receipt", function (receipt) {
-          console.log(receipt);
-        })
-        .on("error", console.error);
     }
-  };
-
+  }
+  
   const getConfig = async () => {
     const configResponse = await fetch("/config/config.json", {
       headers: {
@@ -332,7 +323,7 @@ export default function PageHeader() {
                                 toggle={onDismiss}
                               >
                                 {feedback}
-                                {txreceipt !== "" ? (<a href={`https://opensea.io/assets/matic/0x68e5167252b534ad3a50d559ab61ef6b84e1ee09/${txreceipt.events.Transfer.returnValues.tokenId}`} rel="nofollow">Opensea</a>) : ("")}
+                                {txreceipt !== "" ? (<a href={`https://opensea.io/assets/matic/0x68e5167252b534ad3a50d559ab61ef6b84e1ee09/${txreceipt}`} rel="nofollow">Opensea</a>) : ("")}
                               </Alert>
                             ) : (
                               ""
@@ -565,7 +556,7 @@ export default function PageHeader() {
                                 toggle={onDismiss}
                               >
                                 {feedback}
-                                {txreceipt !== "" ? (<a href={`https://opensea.io/assets/matic/0x527f243b04fcadaa6f6244f65d451bdea8cbfa92/${txreceipt.events.Transfer.returnValues.tokenId}`} rel="nofollow">Opensea</a>) : ("")}
+                                {txreceipt !== "" ? (<a href={`https://opensea.io/assets/matic/0x527f243b04fcadaa6f6244f65d451bdea8cbfa92/${txreceipt}`} rel="nofollow">Opensea</a>) : ("")}
                               </Alert>
                             ) : (
                               ""
