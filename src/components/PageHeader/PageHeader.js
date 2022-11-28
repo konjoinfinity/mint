@@ -17,7 +17,7 @@ let provider = {};
 if (window.ethereum && window.ethereum.isMetaMask) {
   provider = new ethers.providers.Web3Provider(window.ethereum);
 }
-
+let nftid = "";
 let txreceipt = "";
 
 export default function PageHeader() {
@@ -75,7 +75,7 @@ export default function PageHeader() {
         setFeedback("NFT was not imported.");
       }
     } catch (error) {
-      setFeedback(String(error));
+      console.log(error)
     }
   };
 
@@ -88,7 +88,7 @@ export default function PageHeader() {
     if (a == true) {
       cost = 50000000000000000000;
       contractAddress = "0x527F243B04fcaDaA6f6244F65d451bDeA8cBFa92";
-      nftSymbol = "TOXBAEBEEPIX"
+      nftSymbol = "TOXBBPIX"
       nftimg = "toxicbbpix"
     } else {
       cost = CONFIG.WEI_COST;
@@ -126,7 +126,8 @@ export default function PageHeader() {
           setshowLoader(false);
         })
         .then((receipt) => {
-          txreceipt = "data";
+          console.log(receipt);
+          txreceipt = receipt;
           setFeedback(
             `WOW, the ${CONFIG.NFT_NAME} is yours! go visit Opensea.io to view it ==> `
           );
@@ -134,6 +135,7 @@ export default function PageHeader() {
           setshowLoader(false);
           dispatch(fetchData(blockchain.account));
           addNftToWal(contractAddress, nftSymbol, nftimg);
+          
         });
     } catch (err) {
       setFeedback(`${err}`);
@@ -160,6 +162,21 @@ export default function PageHeader() {
     if (blockchain.account !== "" && blockchain.smartContract !== null) {
       dispatch(fetchData(blockchain.account));
       setFeedback("Wallet connected, click 'MINT' to mint an NFT.");
+
+      blockchain.smartContract.methods
+        .totalSupply()
+        .send({ from: blockchain.account })
+        .on("transactionHash", function (hash) {
+          console.log(hash);
+        })
+        .on("confirmation", function (confirmationNumber, receipt) {
+          console.log(confirmationNumber);
+          console.log(receipt);
+        })
+        .on("receipt", function (receipt) {
+          console.log(receipt);
+        })
+        .on("error", console.error);
     }
   };
 
@@ -315,7 +332,7 @@ export default function PageHeader() {
                                 toggle={onDismiss}
                               >
                                 {feedback}
-                                {txreceipt !== "" ? (<a href={"https://opensea.io/collection/toxic-baebee-nft-series"} rel="nofollow">Opensea</a>) : ("")}
+                                {txreceipt !== "" ? (<a href={`https://opensea.io/assets/matic/0x68e5167252b534ad3a50d559ab61ef6b84e1ee09/${txreceipt.events.Transfer.returnValues.tokenId}`} rel="nofollow">Opensea</a>) : ("")}
                               </Alert>
                             ) : (
                               ""
@@ -548,7 +565,7 @@ export default function PageHeader() {
                                 toggle={onDismiss}
                               >
                                 {feedback}
-                                {txreceipt !== "" ? (<a href={"https://opensea.io/collection/toxic-baebee-pixelated"} rel="nofollow">Opensea</a>) : ("")}
+                                {txreceipt !== "" ? (<a href={`https://opensea.io/assets/matic/0x527f243b04fcadaa6f6244f65d451bdea8cbfa92/${txreceipt.events.Transfer.returnValues.tokenId}`} rel="nofollow">Opensea</a>) : ("")}
                               </Alert>
                             ) : (
                               ""
