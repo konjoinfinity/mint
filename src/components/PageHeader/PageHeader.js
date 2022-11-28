@@ -126,12 +126,10 @@ export default function PageHeader() {
           setshowLoader(false);
         })
         .then( async(receipt) => {
-
     const address = contractAddress;
     const erc721 = new ethers.Contract(address, abi, provider);
     let totsup = await erc721.totalSupply();
     totsup = web3.utils.hexToNumber(totsup)
-       
           console.log(receipt);
           txreceipt = String(totsup + 1);
           setFeedback(
@@ -141,7 +139,6 @@ export default function PageHeader() {
           setshowLoader(false);
           dispatch(fetchData(blockchain.account));
           addNftToWal(contractAddress, nftSymbol, nftimg);
-          
         });
     } catch (err) {
       setFeedback(`${err}`);
