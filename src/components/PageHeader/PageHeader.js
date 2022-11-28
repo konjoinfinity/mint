@@ -72,7 +72,7 @@ export default function PageHeader() {
         },
       });
       if (wasAdded) {
-        setFeedback("NFT was imported to your wallet!");
+        setFeedback("NFT was imported to your wallet! View it on ");
       } else {
         setFeedback("NFT was not imported.");
       }
