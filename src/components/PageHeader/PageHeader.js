@@ -65,7 +65,7 @@ export default function PageHeader() {
             address: contract,
             symbol: nftsym,
             decimals: 0,
-            image: `https://mint.reautydao.io/static/media/${png}.png`,
+            image: `https://blingylab.com/wp-content/uploads/${png}.png`,
           },
         },
       });
