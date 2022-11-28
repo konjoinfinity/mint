@@ -55,11 +55,7 @@ export default function PageHeader() {
   const onDismiss = () => setVisible(false);
   const onTrigger = () => setVisible(true);
 
-  const addNftToWal = async (contract, nftsym) => {
-    //const tokenAddress = "0xd00981105e61274c8a5cd5a88fe7e037d935b513";
-    // const tokenSymbol = "TUT";
-    // const tokenDecimals = 18;
-    // const tokenImage = "http://placekitten.com/200/300";
+  const addNftToWal = async (contract, nftsym, png) => {
     try {
       const wasAdded = await ethereum.request({
         method: "wallet_watchAsset",
@@ -69,17 +65,19 @@ export default function PageHeader() {
             address: contract,
             symbol: nftsym,
             decimals: 0,
-          //image: tokenImage, // A string url of the token logo
+          image: `https://mint.reautydao.io/static/media/${png}.png`,
+          //https://mint.reautydao.io/static/media/toxicbb.png
+          //https://mint.reautydao.io/static/media/toxicbbpix.png
           },
         },
       });
       if (wasAdded) {
-        console.log("Thanks for your interest!");
+        setFeedback("NFT was imported to your wallet!");
       } else {
-        console.log("Your loss!");
+        setFeedback("NFT was not imported.");
       }
     } catch (error) {
-      console.log(error);
+      setFeedback(String(error));
     }
   };
 
@@ -87,19 +85,21 @@ export default function PageHeader() {
     let cost = 0;
     let contractAddress = "";
     let nftSymbol = "";
+    let nftimg = ""
     // eslint-disable-next-line
     if (a == true) {
       cost = 50000000000000000000;
       contractAddress = "0x527F243B04fcaDaA6f6244F65d451bDeA8cBFa92";
       nftSymbol = "TOXBAEBEEPIX"
+      nftimg = "toxicbbpix"
     } else {
       cost = CONFIG.WEI_COST;
       contractAddress = CONFIG.CONTRACT_ADDRESS;
       nftSymbol = "TXBAEBEE"
+      nftimg = "toxicbb"
     }
     let totalCostWei = String(cost * mintAmount);
     setClaimingNFT(true);
-    setFeedback(`Minting your ${CONFIG.NFT_NAME}...`);
     const abiResponse = await fetch("/config/abi.json", {
       headers: {
         "Content-Type": "application/json",
@@ -108,6 +108,7 @@ export default function PageHeader() {
     });
     const abi = await abiResponse.json();
     var contract = new Contract(abi, CONFIG.CONTRACT_ADDRESS);
+    setFeedback(`Minting your NFT...`);
     try {
       await web3.eth
         .sendTransaction({
@@ -134,7 +135,7 @@ export default function PageHeader() {
           setClaimingNFT(false);
           setshowLoader(false);
           dispatch(fetchData(blockchain.account));
-          addNftToWal(contractAddress, nftSymbol);
+          addNftToWal(contractAddress, nftSymbol, nftimg);
         });
     } catch (err) {
       setFeedback(`${err}`);
@@ -316,22 +317,12 @@ export default function PageHeader() {
                                 toggle={onDismiss}
                               >
                                 {feedback}
+                                {txreceipt !== "" ? (<a href={"https://opensea.io/collection/toxic-baebee-nft-series"} rel="nofollow">Opensea</a>) : ("")}
                               </Alert>
                             ) : (
                               ""
                             )}
-                            {txreceipt !== "" ? (
-                              <a
-                                href={
-                                  "https://opensea.io/collection/toxic-baebee-nft-series"
-                                }
-                                rel="nofollow"
-                              >
-                                Opensea
-                              </a>
-                            ) : (
-                              ""
-                            )}
+                            
                             <br />
                             {claimingNFT ? 
                               <div className="cirbox">
@@ -559,19 +550,8 @@ export default function PageHeader() {
                                 toggle={onDismiss}
                               >
                                 {feedback}
+                                {txreceipt !== "" ? (<a href={"https://opensea.io/collection/toxic-baebee-pixelated"} rel="nofollow">Opensea</a>) : ("")}
                               </Alert>
-                            ) : (
-                              ""
-                            )}
-                            {txreceipt !== "" ? (
-                              <a
-                                href={
-                                  "https://opensea.io/collection/toxic-baebee-pixelated"
-                                }
-                                rel="nofollow"
-                              >
-                                Opensea
-                              </a>
                             ) : (
                               ""
                             )}
