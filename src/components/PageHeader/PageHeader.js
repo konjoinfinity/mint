@@ -17,7 +17,7 @@ let provider = {};
 if (window.ethereum && window.ethereum.isMetaMask) {
   provider = new ethers.providers.Web3Provider(window.ethereum);
 }
-let nftid = "";
+
 let txreceipt = "";
 
 export default function PageHeader() {
