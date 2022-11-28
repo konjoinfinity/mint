@@ -65,9 +65,7 @@ export default function PageHeader() {
             address: contract,
             symbol: nftsym,
             decimals: 0,
-          image: `https://mint.reautydao.io/static/media/${png}.png`,
-          //https://mint.reautydao.io/static/media/toxicbb.png
-          //https://mint.reautydao.io/static/media/toxicbbpix.png
+            image: `https://mint.reautydao.io/static/media/${png}.png`,
           },
         },
       });
