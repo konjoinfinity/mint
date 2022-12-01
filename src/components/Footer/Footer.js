@@ -30,12 +30,12 @@ export default function Footer() {
           <Col md="3">
             <Nav>
               <NavItem>
-                <NavLink to="/" tag={Link}>
+                <NavLink to="/" tag={Link} className="foot">
                   Home
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="https://reautydao.io/about/" tag={Link}>
+                <NavLink to="https://reautydao.io/about/" tag={Link} className="foot">
                   About
                 </NavLink>
               </NavItem>
@@ -43,12 +43,13 @@ export default function Footer() {
                 <NavLink
                   to="https://www.blingyte.com/privacy-policy"
                   tag={Link}
+                  className="foot"
                 >
                   Terms
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="https://reautydao.io/" tag={Link}>
+                <NavLink to="https://reautydao.io/" tag={Link} className="foot">
                   ReautyDAO
                 </NavLink>
               </NavItem>
